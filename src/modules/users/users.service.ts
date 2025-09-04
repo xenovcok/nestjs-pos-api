@@ -18,6 +18,10 @@ export class UsersService {
         return this.repo.findOne({ where: { email } });
     }
 
+    findByEmailWithPassword(email: string) {
+        return this.repo.findOne({ where: { email }, select: ['id', 'name', 'email', 'password', 'role'] });
+    }
+
     async create(dto: CreateUserDto) {
         const user = this.repo.create(dto);
         return this.repo.save(user);
