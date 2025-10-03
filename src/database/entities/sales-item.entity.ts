@@ -1,12 +1,14 @@
-import {  Column, Entity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {  Column, Entity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Sale } from "./sales.entity";
 
 @Entity('sales_items')
 export class SalesItem {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'int' })
-    sale_id: number;
+    @ManyToOne(() => Sale, (sale) => sale.items)
+    @JoinColumn({name: 'sale_id'})
+    sale: Sale;
 
     @Column({ type: 'int' })
     product_id: number;
@@ -17,8 +19,8 @@ export class SalesItem {
     @Column()
     quantity: number;
 
-    @Column({ type: 'decimal', precision: 10, scale: 2 })
-    sub_total: number;
+    @Column({type: 'decimal', nullable: true})
+    discount: number;
 
     @CreateDateColumn()
     created_at: Date;

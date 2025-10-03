@@ -92,12 +92,6 @@ export class ProductsService {
             await this.repo.update(id, rest);
         }
 
-        if (typeof desiredStock === 'number' && desiredStock !== product.stock) {
-            const diff = Math.abs(desiredStock - (product.stock ?? 0));
-            const type: 'in' | 'out' = desiredStock > (product.stock ?? 0) ? 'in' : 'out';
-            await this.inventory.adjust(id, diff, type, 'product.update');
-        }
-
         return this.findById(id);
     }
 

@@ -17,13 +17,4 @@ export class InventoryController {
   ) {
     return this.inventory.history({ productId: productId ? Number(productId) : undefined, type, page, limit });
   }
-
-  // Optional centralized adjust endpoint in addition to product-scoped one
-  @Post(':productId/adjust')
-  adjust(
-    @Param('productId', ParseIntPipe) productId: number,
-    @Body() dto: AdjustInventoryDto,
-  ) {
-    return this.inventory.adjust(productId, dto.change, dto.type, dto.reason);
-  }
 }

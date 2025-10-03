@@ -5,9 +5,11 @@ import {
     CreateDateColumn, 
     UpdateDateColumn, 
     ManyToOne,
-    JoinColumn
+    JoinColumn,
+    ManyToMany
 } from "typeorm";
 import { Category } from "./category.entity";
+import { Promo } from "./promo.entity";
 
 @Entity('products')
 export class Product {
@@ -27,8 +29,17 @@ export class Product {
     @JoinColumn({ name: 'category_id' })
     category: Category;
 
-    @Column()
-    stock: number;
+    @Column({ nullable: true })
+    description: string;
+
+    @Column({ nullable: true })
+    image_url: string;
+
+    @Column({ nullable: true })
+    discounted_price: number;
+
+    @ManyToMany(() => Promo, (promo) => promo.products)
+    promos: Promo[];
 
     @Column({ default: true })
     is_active: boolean;

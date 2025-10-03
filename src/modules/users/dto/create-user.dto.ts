@@ -1,4 +1,5 @@
 import { IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { UserRole } from "src/database/entities/user.entity";
 
 export class CreateUserDto {
     @IsString() @IsNotEmpty()
@@ -10,6 +11,6 @@ export class CreateUserDto {
     @IsString() @IsNotEmpty() @MinLength(6)
     password: string;
 
-    @IsOptional() @IsIn(['admin', 'kasir', 'owner'])
-    role?: 'admin' | 'kasir' | 'owner';
+    @IsOptional() @IsIn([UserRole.ADMIN, UserRole.KASIR, UserRole.OWNER])
+    role?: UserRole;
 }

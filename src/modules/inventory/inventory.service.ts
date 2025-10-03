@@ -11,34 +11,6 @@ export class InventoryService {
     @InjectRepository(Product) private readonly productRepo: Repository<Product>,
   ) {}
 
-  async adjust(productId: number, changeAbs: number, type: 'in' | 'out', reason?: string) {
-    if (changeAbs <= 0) throw new BadRequestException('change must be > 0');
-
-    return this.invRepo.manager.transaction(async (manager) => {
-      const product = await manager.getRepository(Product).findOne({ where: { id: productId } });
-      if (!product) throw new NotFoundException('Product not found');
-
-      const delta = type === 'in' ? changeAbs : -changeAbs;
-      const newStock = (product.stock ?? 0) + delta;
-      if (newStock < 0) {
-        throw new BadRequestException('Insufficient stock');
-      }
-
-      // save inventory movement
-      const movement = manager.getRepository(Inventory).create({
-        product_id: productId,
-        change: Math.abs(changeAbs),
-        type,
-      } as any);
-      await manager.getRepository(Inventory).save(movement);
-
-      // update product stock
-      await manager.getRepository(Product).update(productId, { stock: newStock });
-
-      return { movement, product: { ...product, stock: newStock } };
-    });
-  }
-
   async history(params?: { productId?: number; type?: 'in' | 'out'; page?: number; limit?: number }) {
     const page = Math.max(1, params?.page ?? 1);
     const limit = Math.min(100, Math.max(1, params?.limit ?? 10));

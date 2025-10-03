@@ -63,12 +63,4 @@ export class ProductsController {
     delete(@Param('id', ParseIntPipe) id: number) {
         return this.service.delete(id);
     }
-
-    @Post(':id/adjust-stock')
-    adjustStock(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() dto: AdjustInventoryDto,
-    ) {
-        return this.inventory.adjust(id, dto.change, dto.type, dto.reason);
-    }
 }

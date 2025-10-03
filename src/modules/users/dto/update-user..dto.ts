@@ -1,4 +1,5 @@
 import { IsEmail, IsIn, IsOptional, IsString } from "class-validator";
+import { UserRole } from "src/database/entities/user.entity";
 
 export class UpdateUserDto {
     @IsOptional() @IsString()
@@ -10,6 +11,6 @@ export class UpdateUserDto {
     @IsOptional() @IsString()
     password?: string;
 
-    @IsOptional() @IsIn(['admin', 'kasir', 'owner'])
-    role?: 'admin' | 'kasir' | 'owner';
+    @IsOptional() @IsIn([UserRole.ADMIN, UserRole.KASIR, UserRole.OWNER])
+    role?: UserRole;
 }

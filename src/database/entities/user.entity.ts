@@ -8,7 +8,17 @@ import {
 } from "typeorm";
 import * as bcrypt from 'bcrypt';
 
-export type UserRole = 'admin' | 'kasir' | 'owner';
+export enum UserRole {
+    ADMIN = 'admin',
+    KASIR = 'kasir',
+    OWNER = 'owner'
+}
+
+export enum Status {
+    ACTIVE = 'active',
+    INACTIVE = 'inactive',
+    BANNED = 'banned'
+}
 
 @Entity('users')
 export class User {
@@ -24,8 +34,21 @@ export class User {
     @Column({ select: false })
     password: string;
 
-    @Column({ type: 'varchar', length: 20, default: 'kasir' })
+    @Column({ type: 'varchar', length: 20, default: UserRole.KASIR })
     role: UserRole;
+
+    @Column({ nullable: true })
+    phone: string;
+
+    @Column({ nullable: true })
+    address: string;
+
+    @Column({
+        type: 'enum',
+        enum: Status,
+        default: Status.ACTIVE
+    })
+    status: Status;
 
     @CreateDateColumn()
     created_at: Date;
